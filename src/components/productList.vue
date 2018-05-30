@@ -22,7 +22,8 @@
                 :price="item.price"
                 :title="item.patentname"
                 style="background-color: #fff;"
-                v-for="item in pList"
+                v-for="(item,index) in pList"
+                :key=index
                 :thumb="item.thumb">
                 <div slot="desc" style="margin-top: 10px" @click="toDetail(item.pid)">
                     <span style="font-size: 10px; float: left">申请号：{{ item.patentcode }}</span><br>

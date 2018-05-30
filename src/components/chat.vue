@@ -41,7 +41,7 @@
                     </div>
                 </van-col>
             </van-row>
-            <van-row style="margin-top: 20px" v-for="item in customerMsg2">
+            <van-row style="margin-top: 20px" v-for="(item,index) in customerMsg2" :key=index>
                 <van-col span="16">
                     <div class="msg">
                         <span class="msg_font">{{ item }}</span>

@@ -17,7 +17,7 @@
         </div>
 
         <van-row style="background-color: #ffff;padding-top: 10px">
-                <van-col span="8" v-for="item in list2">
+                <van-col span="8" v-for="(item,index) in list2" :key=index>
                     <center>
                         <img :src="item.src" style="width: 80px; height: 80px"  @click="toProductList(item)">
                         <p style="font-size: 14px;color: #aaa;">{{ item.content }}</p>
@@ -33,7 +33,7 @@
 
         <van-list>
             <van-row gutter="20" style="background-color: #ffff;padding-top: 10px;padding-bottom: 50px">
-                <van-col span="8" v-for="(item, index) in list">
+                <van-col span="8" v-for="(item, index) in list" :key=index>
                     <center>
                         <img :src="item.src" style="width: 80px; height: 80px"  @click="toProductList(item)">
                         <p style="font-size: 14px;color: #aaa;">{{ item.content }}</p>
