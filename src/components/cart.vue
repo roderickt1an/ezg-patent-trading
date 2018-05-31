@@ -20,7 +20,8 @@
                     <span style="font-size: 10px; float: left">专利类型：{{ item.patenttype }}</span>
                 </div>
                 <div slot="footer">
-                    <van-button size="small" type="danger" @click="buy(item.id)" v-if="item.paymentstatus!=notpaid">购买</van-button>
+                    <van-button size="small" type="danger" @click="buy(item.id)" v-if="item.paymentstatus !='paid'">购买</van-button>
+                    <van-button size="small" type="default" v-if="item.paymentstatus=='paid'" disabled>已购买</van-button>                    
                 </div>
             </van-card>
         </van-list>
@@ -47,6 +48,9 @@ export default {
       finished: false,
       noOrder: false,
       notpay: [],
+      patents_industryType: [],
+      patents_productstatus: [],
+      patents_type: []
     };
   },
   methods: {
@@ -56,7 +60,7 @@ export default {
       this.$http.get('/api/IWoaPatentsController.do?apicheckPatentsOrder&userid=' + localStorage.getItem('userId'))
       .then(function(res) {
         if (res.data.length < 1) {
-          _self.loading = false
+          _self.loading = flase
           _self.finished = true
           _self.noOrder = true
         } else {
@@ -66,7 +70,26 @@ export default {
                       let _img = ''
                       _img = '/api/' + response.data[0].realpath
                       res.data[i].thumb = _img
-                        _self.notpay.push(res.data[i])
+                      
+                      for (let j = 0; j < _self.patents_type.length; j++) {
+                            if (res.data[i].patenttype == _self.patents_type[j].typecode) {
+                                res.data[i].patenttype = _self.patents_type[j].typename
+                            } else {
+                                continue;
+                            }
+                        }
+                        for (let k = 0; k < _self.patents_industryType.length; k++) {
+                            if (res.data[i].industry == _self.patents_industryType[k].typecode) {
+                                res.data[i].industry = _self.patents_industryType[k].typename
+                            } else {
+                                continue;
+                            }
+                        }
+                      _self.notpay.push(res.data[i])
+                      console.log('11111')
+                        // _self.loading = flase
+                      
+                    //   _self.loading = true
                   })
           }
         }
@@ -104,6 +127,17 @@ export default {
                 }
             })
         },
+        getCenterData() {
+            let _self = this
+
+            this.$http.get('/api/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus')
+            .then(function(res) {
+                _self.patents_industryType = res.data.patents_industryType
+                _self.patents_productstatus = res.data.patents_productstatus
+                _self.patents_type = res.data.patents_type
+                _self.getData()
+            })
+        }
 
         // toDetail(a) {
         //     let _self = this
@@ -117,7 +151,7 @@ export default {
         // }
   },
   mounted() {
-    this.getData()
+    this.getCenterData()
   }
 };
 </script>

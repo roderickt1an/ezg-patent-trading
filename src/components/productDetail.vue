@@ -39,7 +39,7 @@
             </van-tab>
             <van-tab title="摘要及附图" style="margin-bottom: 50px">
                 <br><div>{{ goods.abstracter }}</div><br>
-                <img v-for="img in imageList" v-lazy="img">
+                <img v-for="(img,index) in imageList" v-lazy="img" :key=index>
             </van-tab>
             <van-tab title="权利要求" style="margin-bottom: 50px">
                 <br><div>{{ goods.requirees }}</div><br>

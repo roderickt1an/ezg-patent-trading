@@ -1,9 +1,15 @@
 <template>
     <div>
-        <van-nav-bar
+        <!-- <van-nav-bar
             title="列表"
             left-arrow
             right-text="筛选"
+            @click-right="onClickRight"
+            @click-left="onClickLeft"/> -->
+
+        <van-nav-bar
+            title="列表"
+            left-arrow
             @click-right="onClickRight"
             @click-left="onClickLeft"/>
 
@@ -36,7 +42,7 @@
             </van-card>
         </van-list>
 
-        <van-popup v-model="show" position="right" :overlay="true">
+        <!-- <van-popup v-model="show" position="right" :overlay="true">
             <van-tree-select
                 :items="items"
                 :main-active-index="mainActiveIndex"
@@ -44,7 +50,7 @@
                 @navclick="onNavClick"
                 @itemclick="onItemClick"
             />
-        </van-popup>
+        </van-popup> -->
     </div>
 </template>
 
