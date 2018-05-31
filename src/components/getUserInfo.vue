@@ -14,7 +14,9 @@ export default {
 
         this.$http.get('/api/IWoaPatentsController.do?apiCheckWechatUser')
         .then(function(res) {
+            // alert(res.data)
             window.location.href = res.data
+            // window.open(res.data)
         })
     },
   },
