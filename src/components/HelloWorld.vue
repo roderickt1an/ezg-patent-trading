@@ -1,19 +1,25 @@
 <template>
     <div>
-        <van-nav-bar
-            title="专利交易平台"/>
+        <!-- <van-nav-bar
+            title="专利交易平台"/> -->
 
-        <form action="/">
+        <form action="/" style="height:200px;background-image:url(/static/img/home2/banner.jpg)">
+            <center style="padding-top:25px;color:#202020;letter-spacing:3px;opacity:0.8"><h3>专利交易平台</h3></center>
             <van-search
+                style="top:10px;background: rgba(0,0,0,0)"
                 v-model="searchvalue"
+                show-action
                 placeholder="输入专利名称搜索"
-                @search="onSearch"/>
+                @search="onSearch">
+                <div slot="action" @click="onSearch" style="margin-left:10px;margin-right:10px;color:#666666;">
+                    <van-button type="default" size="small" style="">搜索</van-button></div>
+            </van-search>
         </form>
 
         <div style="margin-top: 5px"></div>
 
         <div style="padding: 10px 0 0 10px; background-color: #ffff; border-bottom: 1px solid #eeeeee;">
-            <img style="vertical-align:middle;height: 30px; width: 28px" src="./5.png"><span style="margin-left: 2%; color: #FF0000">专利精选</span>
+            <img style="vertical-align:middle;height: 30px; width: 28px;margin-bottom:10px" src="./5.png"><span style="margin-left: 2%; color: #666666;font-weight:bold;">专利精选</span>
         </div>
         <!-- <van-swipe :autoplay="3000">
             <van-swipe-item v-for="(item, index) in list2" :key="index">
@@ -26,9 +32,9 @@
         </van-swipe> -->
 
         <van-row style="background-color: #ffffff;padding-top: 10px">
-                <van-col span="8" v-for="(item,index) in list2" :key=index>
+                <van-col span="6" v-for="(item,index) in list2" :key=index>
                     <center>
-                        <img v-lazy="item.src" style="width: 80px; height: 80px"  @click="toDetail(item)">
+                        <img v-lazy="item.src" style="width: 80px; height: 80px;"  @click="toDetail(item)">
                         <p style="font-size: 14px;color: #aaa;">{{ item.content }}</p>
                     </center>
                 </van-col>
@@ -37,14 +43,14 @@
         <div style="margin-top: 5px"></div>
 
         <div style="padding: 10px 0 0 10px; background-color: #ffff; border-bottom: 1px solid #eeeeee;">
-            <img style="vertical-align:middle;height: 30px; width: 28px" src="./u51.png"><span style="margin-left: 2%; color: #FF0000">热门分类</span>
+            <img style="vertical-align:middle;height: 30px; width: 28px;margin-bottom:10px" src="./u51.png"><span style="margin-left: 2%;color: #666666;font-weight:bold;">热门分类</span>
         </div>
 
         <van-list>
-            <van-row gutter="20" style="background-color: #ffffff;padding-top: 10px;padding-bottom: 50px">
-                <van-col span="8" v-for="(item, index) in list" :key=index>
+            <van-row gutter="20" style="background-color: #ffffff;padding-top: 10px;padding-bottom: 50px;padding-left:15px;padding-right:15px">
+                <van-col span="6" v-for="(item, index) in list" :key=index style="height:130px">
                     <center>
-                        <img :src="item.src" style="width: 80px; height: 80px"  @click="toProductList(item)">
+                        <img :src="item.src" style="width: 50px; height: 50px"  @click="toProductList(item)">
                         <p style="font-size: 14px;color: #aaa;">{{ item.content }}</p>
                     </center>
                 </van-col>
@@ -120,17 +126,17 @@ export default {
             // _self.list2[0].src = './static/img/home/jt.png'
             // _self.list2[1].src = './static/img/home/ny.jpg'
             // _self.list2[2].src = './static/img/home/hg.png'
-            _self.list[0].src = './static/img/home/jt.png'
-            _self.list[1].src = './static/img/home/ny.jpg'
-            _self.list[2].src = './static/img/home/hg.png'
-            _self.list[3].src = './static/img/home/fz.png'
-            _self.list[4].src = './static/img/home/jz.png'
-            _self.list[5].src = './static/img/home/jx.png'
-            _self.list[6].src = './static/img/home/ry.png'
-            _self.list[7].src = './static/img/home/tx.png'
-            _self.list[8].src = './static/img/home/yl.png'
-            _self.list[9].src = './static/img/home/ny.png'
-            _self.list[10].src = './static/img/home/qt.png'
+            _self.list[0].src = './static/img/home2/jt.png'
+            _self.list[1].src = './static/img/home2/sp.png'
+            _self.list[2].src = './static/img/home2/hg.png'
+            _self.list[3].src = './static/img/home2/fz.png'
+            _self.list[4].src = './static/img/home2/jz.png'
+            _self.list[5].src = './static/img/home2/jx.png'
+            _self.list[6].src = './static/img/home2/ry.png'
+            _self.list[7].src = './static/img/home2/tx.png'
+            _self.list[8].src = './static/img/home2/yl.png'
+            _self.list[9].src = './static/img/home2/ny.png'
+            _self.list[10].src = './static/img/home2/qt.png'
         })
         this.$http.get('/api/IWoaPatentsController.do?apiqueryPatentChoiceness')
         .then(function(res) {

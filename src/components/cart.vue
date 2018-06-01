@@ -60,7 +60,7 @@ export default {
       this.$http.get('/api/IWoaPatentsController.do?apicheckPatentsOrder&userid=' + localStorage.getItem('userId'))
       .then(function(res) {
         if (res.data.length < 1) {
-          _self.loading = flase
+          _self.loading = false
           _self.finished = true
           _self.noOrder = true
         } else {
