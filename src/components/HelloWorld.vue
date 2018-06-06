@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="overflow-x: hidden">
         <!-- <van-nav-bar
             title="专利交易平台"/> -->
 

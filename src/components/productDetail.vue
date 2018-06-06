@@ -78,7 +78,8 @@ export default {
             imageList: [],
             patents_industryType: [],
             patents_productstatus: [],
-            patents_type: []
+            patents_type: [],
+            patents_legalstatus:[]
         }
     },
     methods: {
@@ -86,9 +87,10 @@ export default {
             let _self = this
             _self.patdetid = this.$route.params.patdetid
             _self.typecode = this.$route.params.typecode
-
-            _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + _self.patdetid)
+            localStorage.setItem('patdetid', _self.$route.params.patdetid)
+            _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + localStorage.getItem('patdetid'))
                 .then(function(res) {
+                    
                     let _patenttype = ''
                     let _industryType = ''
                     let _legalstatus = ''
@@ -107,9 +109,16 @@ export default {
                             continue;
                         }
                     }
-                    for (let t = 0; t < _self.patents_productstatus.length; t++) {
-                        if (res.data[0].legalstatus == _self.patents_productstatus[t].typecode) {
-                            _legalstatus = _self.patents_productstatus[t].typename
+                    // for (let t = 0; t < _self.patents_productstatus.length; t++) {
+                    //     if (res.data[0].legalstatus == _self.patents_productstatus[t].typecode) {
+                    //         _legalstatus = _self.patents_productstatus[t].typename
+                    //     } else {
+                    //         continue;
+                    //     }
+                    // }
+                    for (let t = 0; t < _self.patents_legalstatus.length; t++) {
+                        if (res.data[0].legalstatus == _self.patents_legalstatus[t].typecode) {
+                            _legalstatus = _self.patents_legalstatus[t].typename
                         } else {
                             continue;
                         }
@@ -148,7 +157,10 @@ export default {
             let _self = this
             this.$router.push({
                 name: 'chat',
-                params: _self.goods
+                params: {
+                    goods: _self.goods,
+                    patdetid: _self.patdetid
+                }
             })
         },
 
@@ -171,17 +183,23 @@ export default {
         getCenterData() {
             let _self = this
 
-            this.$http.get('/api/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus')
+            this.$http.get('/api/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus,patents_legalstatus')
             .then(function(res) {
                 _self.patents_industryType = res.data.patents_industryType
                 _self.patents_productstatus = res.data.patents_productstatus
                 _self.patents_type = res.data.patents_type
+                _self.patents_legalstatus  = res.data.patents_legalstatus
                 _self.getData()
             })
         }
     },
-    mounted() {
+    created() {
+        let _self = this
         this.getCenterData()
+        window.addEventListener('popstate',(e)=>{
+            console.log(_self.$route)
+            console.log("1111")
+        })
     }
 }
 </script>

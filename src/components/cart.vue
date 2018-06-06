@@ -4,9 +4,8 @@
             title="订单"/>
 
     <van-list
-            v-model="loading"
-            :finished="finished"
-            @load="onLoad">
+
+            :finished="finished">
             <van-card
                 :price="item.price"
                 :title="item.patentname"
@@ -56,6 +55,7 @@ export default {
   methods: {
     getData() {
       let _self = this
+        _self.loading = true
 
       this.$http.get('/api/IWoaPatentsController.do?apicheckPatentsOrder&userid=' + localStorage.getItem('userId'))
       .then(function(res) {
@@ -65,12 +65,14 @@ export default {
           _self.noOrder = true
         } else {
           for (let i = 0; i < res.data.length; i++) {
+            _self.finished = true
             _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].id)
                     .then(function(response) {
+
                       let _img = ''
                       _img = '/api/' + response.data[0].realpath
                       res.data[i].thumb = _img
-                      
+                        
                       for (let j = 0; j < _self.patents_type.length; j++) {
                             if (res.data[i].patenttype == _self.patents_type[j].typecode) {
                                 res.data[i].patenttype = _self.patents_type[j].typename
@@ -85,8 +87,11 @@ export default {
                                 continue;
                             }
                         }
-                      _self.notpay.push(res.data[i])
+                      _self.notpay.push(res.data[i])                
                       console.log('11111')
+                      _self.loading = false
+                      
+                      
                         // _self.loading = flase
                       
                     //   _self.loading = true

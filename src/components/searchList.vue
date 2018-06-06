@@ -8,8 +8,13 @@
         <form action="/">
             <van-search
                 v-model="searchvalue"
+                show-action                
                 placeholder="输入专利名称搜索"
-                @search="onSearch"/>
+                @search="onSearch">
+                <div slot="action" @click="onSearch" style="margin-left:10px;margin-right:10px;color:#666666;">
+                    <van-button type="default" size="small" style="">搜索</van-button>
+                </div>
+            </van-search>
         </form>
 
         <van-list
@@ -32,6 +37,14 @@
                     <van-button size="small" type="danger" @click="buy(item.id)">购买</van-button>
                 </div>
             </van-card>
+            <van-card>
+                <div slot="desc" v-if="searchzero" style="margin-top:20px;font-size:12px">
+                    <div>
+                        <div>对不起，暂无相关专利！</div>
+                        <!-- <div>即将返回首页...</div> -->
+                    </div>
+                </div>
+            </van-card>
         </van-list>
     </div>
 </template>
@@ -40,6 +53,7 @@
 export default {
     data() {
         return{
+            searchzero:false,
             loading: false,
             finished: false,
             page: 1,
@@ -74,6 +88,8 @@ export default {
                     searchvalue: _self.searchvalue
                 }
             })
+            _self.searchvalue2 = _self.searchvalue
+            _self.getData()
         }
     },
 
@@ -83,8 +99,8 @@ export default {
             _self.page = _self.page + 1
 
             setTimeout(() => {
-                        _self.loading = false
-                        _self.finished = true;
+                _self.loading = false
+                _self.finished = true;
             }, 500);
         },
 
@@ -107,10 +123,18 @@ export default {
 
         getData() {
             let _self = this
-
-            this.$http.get('/api/IWoaPatentsController.do?apiCheckPatentsMsg&patentsname=' + _self.searchvalue2)
-            .then(function(res) {
+            _self.pList = []
+            this.$http.get('/api/IWoaPatentsController.do?apiCheckPatentsMsg&patentsname=' + _self.searchvalue2).then(function(res) {
+                if(res.data.length == 0){
+                    _self.searchzero = true
+                //     // window.location.href = '/#/HelloWorld?id=' + localStorage.getItem('userId')
+                    // setTimeout(()=>{
+                    //     _self.onClickLeft()
+                    // },3000)
+                //     // _self.onClickLeft()
+                }
                 for (let i = 0; i < res.data.length; i++) {
+                    
                     _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].id)
                     .then(function(response) {
                         let _img = ''

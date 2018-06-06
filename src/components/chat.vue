@@ -28,22 +28,22 @@
             </van-field>
 
             <van-row style="margin-top: 20px" v-show="isFirst">
-                <van-col span="16">
-                    <div class="msg">
+                <van-col>
+                    <div class="msg" style="padding-top:15px;padding-bottom:15px;border-top-right-radius:20px;border-bottom-right-radius:20px">
                         <span class="msg_font">{{ customerMsg[0] }}</span>
                     </div>
                 </van-col>
             </van-row>
-            <van-row style="margin-top: 20px" v-show="isFirst">
-                <van-col span="16" style="float: right;">
-                    <div class="msg">
-                        <span class="msg_font">我们的管家会尽快与您联系！</span>
+            <van-row style="margin-top:20px;" v-show="isFirst">
+                <van-col style="float: right;">
+                    <div class="msg" style="padding-top:15px;padding-bottom:15px;border-top-left-radius:20px;border-bottom-left-radius:20px">
+                        <span class="msg_font" >我们的管家会尽快与您联系！</span>
                     </div>
                 </van-col>
             </van-row>
             <van-row style="margin-top: 20px" v-for="(item,index) in customerMsg2" :key=index>
-                <van-col span="16">
-                    <div class="msg">
+                <van-col>
+                    <div class="msg" style="padding-top:15px;padding-bottom:15px;border-top-right-radius:20px;border-bottom-right-radius:20px">
                         <span class="msg_font">{{ item }}</span>
                     </div>
                 </van-col>
@@ -60,13 +60,21 @@ export default {
             customerMsg2: [],
             message: '',
             goods: {},
-            count: 1
+            count: 1,
+            patdetid:""
         }
     },
     methods: {
         // 返回操作
         onClickLeft() {
-            this.$router.go(-1)
+            let _self = this
+            // this.$router.go(-1)
+            _self.$router.push({
+                name: 'productDetail',
+                params: {
+                    patdetid: _self.patdetid
+                }
+            })
         },
 
         send() {
@@ -105,8 +113,13 @@ export default {
         }
     },
     mounted() {
-        this.goods = this.$route.params
-        console.log(this.$route.params)
+        let _self = this
+        this.goods = this.$route.params.goods
+        this.patdetid = this.$route.params.patdetid
+        // console.log(this.$route.params)
+        // document.addEventListener('popstate',()=>{
+        //     _self.onClickLeft()
+        // })
     }
 }
 </script>

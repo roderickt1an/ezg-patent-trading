@@ -17,7 +17,12 @@
             <van-search
                 v-model="searchvalue"
                 placeholder="输入专利名称搜索"
-                @search="onSearch"/>
+                show-action
+                @search="onSearch">
+                <div slot="action" @click="onSearch" style="margin-left:10px;margin-right:10px;color:#666666;">
+                    <van-button type="default" size="small" style="">搜索</van-button>
+                </div>
+            </van-search>
         </form>
 
         <van-list
