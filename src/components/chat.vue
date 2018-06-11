@@ -81,7 +81,7 @@ export default {
             let _self = this
 
             this.$http({
-                url: '/api/IWoaPatentsController.do?apiSavePatentsLeave',
+                url: '/patent/IWoaPatentsController.do?apiSavePatentsLeave',
                 method: 'post',
                 data: {
                     leavemsg: _self.message,
@@ -107,6 +107,7 @@ export default {
                         } else {
                             _self.customerMsg2.push(_self.message)
                         }
+                        _self.message = ""
                         
                     }
                 })

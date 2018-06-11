@@ -42,7 +42,7 @@ export default {
     getData() {
       let _self = this
 
-      this.$http.get('/api/IWoaPatentsController.do?apicheckPatentUserMsg&userid=' + localStorage.getItem('userId'))
+      this.$http.get('/patent/IWoaPatentsController.do?apicheckPatentUserMsg&userid=' + localStorage.getItem('userId'))
       .then(function(res) {
         _self.userInfo = res.data[0]
         if (_self.userInfo.usertel == null) { _self.userInfo.usertel = '未认证' }  

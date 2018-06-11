@@ -57,7 +57,7 @@ export default {
       let _self = this
         _self.loading = true
 
-      this.$http.get('/api/IWoaPatentsController.do?apicheckPatentsOrder&userid=' + localStorage.getItem('userId'))
+      this.$http.get('/patent/IWoaPatentsController.do?apicheckPatentsOrder&userid=' + localStorage.getItem('userId'))
       .then(function(res) {
         if (res.data.length < 1) {
           _self.loading = false
@@ -66,11 +66,11 @@ export default {
         } else {
           for (let i = 0; i < res.data.length; i++) {
             _self.finished = true
-            _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].id)
+            _self.$http.get('/patent/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].id)
                     .then(function(response) {
 
                       let _img = ''
-                      _img = '/api/' + response.data[0].realpath
+                      _img = '/patent/' + response.data[0].realpath
                       res.data[i].thumb = _img
                         
                       for (let j = 0; j < _self.patents_type.length; j++) {
@@ -120,10 +120,10 @@ export default {
         buy(a) {
             let _self = this
 
-            this.$http.get('/api/IWoaPatentsController.do?apiSavePatentsOrder&patentsid=' + a + '&userid=' + localStorage.getItem('userId'))
+            this.$http.get('/patent/IWoaPatentsController.do?apiSavePatentsOrder&patentsid=' + a + '&userid=' + localStorage.getItem('userId'))
             .then(function(res) {
                 if (res.data.msgCode == '40000') {
-                    _self.$http.get('/api/IWoaPatentsController.do?apiPatentsWechatPay&orderid=' + res.data.data)
+                    _self.$http.get('/patent/IWoaPatentsController.do?apiPatentsWechatPay&orderid=' + res.data.data)
                     .then(function(response) {
                         window.location.href = response.data
                     })
@@ -135,7 +135,7 @@ export default {
         getCenterData() {
             let _self = this
 
-            this.$http.get('/api/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus')
+            this.$http.get('/patent/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus')
             .then(function(res) {
                 _self.patents_industryType = res.data.patents_industryType
                 _self.patents_productstatus = res.data.patents_productstatus

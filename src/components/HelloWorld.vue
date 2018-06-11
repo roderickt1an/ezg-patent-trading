@@ -8,11 +8,10 @@
             <van-search
                 style="top:10px;background: rgba(0,0,0,0)"
                 v-model="searchvalue"
-                show-action
                 placeholder="输入专利名称搜索"
                 @search="onSearch">
-                <div slot="action" @click="onSearch" style="margin-left:10px;margin-right:10px;color:#666666;">
-                    <van-button type="default" size="small" style="">搜索</van-button></div>
+                <!-- <div slot="action" @click="onSearch" style="margin-left:10px;margin-right:10px;color:#666666;">
+                    <van-button type="default" size="small" style="">搜索</van-button></div> -->
             </van-search>
         </form>
 
@@ -31,8 +30,8 @@
             </van-swipe-item>
         </van-swipe> -->
 
-        <van-row style="background-color: #ffffff;padding-top: 10px">
-                <van-col span="6" v-for="(item,index) in list2" :key=index>
+        <van-row style="background-color: #ffffff;padding-top: 10px;padding-left:10px;padding-right:10px">
+                <van-col span="8" v-for="(item,index) in list2" :key=index>
                     <center>
                         <img v-lazy="item.src" style="width: 80px; height: 80px;"  @click="toDetail(item)">
                         <p style="font-size: 14px;color: #aaa;">{{ item.content }}</p>
@@ -108,14 +107,16 @@ export default {
 
     getParding() {
         let _self = this
-        this.$http.get('/api/IWoaPatentsController.do?apiQueryPatentsClassify')
+        // this.$http.get('/patent/IWoaPatentsController.do?apiQueryPatentsClassify')
+        this.$http.get('/patent/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_industryType')
         .then(function(res) {
+            console.log(res.data.patents_industryType)
             _self.list = []
             // alert(res.data)
-            for (let i = 0; i < res.data.length; i++) {
+            for (let i = 0; i < res.data.patents_industryType.length; i++) {
                 let _data = {}
-                _data.typecode = res.data[i].typecode
-                _data.content = res.data[i].typename
+                _data.typecode = res.data.patents_industryType[i].typecode
+                _data.content = res.data.patents_industryType[i].typename
                 // if (i < 3) {
                 //     _self.list2.push(_data)
                 // } 
@@ -138,15 +139,15 @@ export default {
             _self.list[9].src = './static/img/home2/ny.png'
             _self.list[10].src = './static/img/home2/qt.png'
         })
-        this.$http.get('/api/IWoaPatentsController.do?apiqueryPatentChoiceness')
+        this.$http.get('/patent/IWoaPatentsController.do?apiqueryPatentChoiceness')
         .then(function(res) {
             _self.list2 = []
             // alert(res.data)
             for (let i = 0; i < res.data.length; i++) {
                 let _data = {}
-                _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].pid).then(function(srcres){
+                _self.$http.get('/patent/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].pid).then(function(srcres){
                     // console.log(srcres.data[0].realpath)
-                    _data.src = '/api/' + srcres.data[0].realpath
+                    _data.src = '/patent/' + srcres.data[0].realpath
                     _data.pid = res.data[i].pid
                     _data.content = res.data[i].patentname
                     _data.typecode = res.data[i].typecode

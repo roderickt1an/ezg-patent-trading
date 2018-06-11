@@ -12,7 +12,7 @@ export default {
     getUserInfo() {
         let _self = this
 
-        this.$http.get('/api/IWoaPatentsController.do?apiCheckWechatUser')
+        this.$http.get('/patent/IWoaPatentsController.do?apiCheckWechatUser')
         .then(function(res) {
             // alert(res.data)
             window.location.href = res.data

@@ -55,7 +55,7 @@ export default {
     	getYZM() {
     		let _self = this
     		if(_self.phone != '') {
-    			_self.$http.get('/api/IWoaPatentsController.do?apigetPhoneVerify&userid=' + localStorage.getItem('userId') + '&usertel=' + _self.phone)
+    			_self.$http.get('/patent/IWoaPatentsController.do?apigetPhoneVerify&userid=' + localStorage.getItem('userId') + '&usertel=' + _self.phone)
     			.then(function(res) {
     				_self.yzm = res.data
     				_self.$toast.success('验证码已发送')
@@ -66,7 +66,7 @@ export default {
     	bangding() {
     		let _self = this
 
-    		this.$http.get('/api/IWoaPatentsController.do?apisavePatentsUserTel&userid=' + localStorage.getItem('userId') + '&usertel=' + _self.phone)
+    		this.$http.get('/patent/IWoaPatentsController.do?apisavePatentsUserTel&userid=' + localStorage.getItem('userId') + '&usertel=' + _self.phone)
     		.then(function(res) {
     			_self.$toast.success(res.data.msg)
                 _self.$router.push({

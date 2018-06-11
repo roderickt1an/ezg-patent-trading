@@ -8,12 +8,12 @@
         <form action="/">
             <van-search
                 v-model="searchvalue"
-                show-action                
+                                
                 placeholder="输入专利名称搜索"
                 @search="onSearch">
-                <div slot="action" @click="onSearch" style="margin-left:10px;margin-right:10px;color:#666666;">
-                    <van-button type="default" size="small" style="">搜索</van-button>
-                </div>
+                <!-- <div slot="action" style="margin-left:10px;margin-right:10px;color:#666666;">
+                    <van-button type="default" size="small" @click="onSearch">搜索</van-button>
+                </div> -->
             </van-search>
         </form>
 
@@ -37,15 +37,19 @@
                     <van-button size="small" type="danger" @click="buy(item.id)">购买</van-button>
                 </div>
             </van-card>
-            <van-card>
-                <div slot="desc" v-if="searchzero" style="margin-top:20px;font-size:12px">
-                    <div>
+            <!-- <van-card>
+                <div slot="desc" style="margin-top:20px;font-size:12px">
+                    <div style="margin-left:20px">
+                        这是底部！
                         <div>对不起，暂无相关专利！</div>
-                        <!-- <div>即将返回首页...</div> -->
+                        <div>即将返回首页...</div>
                     </div>
                 </div>
-            </van-card>
+            </van-card> -->
         </van-list>
+        <center style="margin-top:20px;font-size:12px" v-if="searchzero">
+            <div>对不起，暂无相关专利！</div>
+        </center>
     </div>
 </template>
 
@@ -82,12 +86,12 @@ export default {
         if (_self.searchvalue == '') {
             _self.$toast('请输入搜索内容')
         } else {
-            _self.$router.push({
-                name: 'searchList',
-                params: {
-                    searchvalue: _self.searchvalue
-                }
-            })
+            // _self.$router.push({
+            //     name: 'searchList',
+            //     params: {
+            //         searchvalue: _self.searchvalue
+            //     }
+            // })
             _self.searchvalue2 = _self.searchvalue
             _self.getData()
         }
@@ -108,10 +112,10 @@ export default {
         buy(a) {
             let _self = this
 
-            this.$http.get('/api/IWoaPatentsController.do?apiSavePatentsOrder&patentsid=' + a + '&userid=' + localStorage.getItem('userId'))
+            this.$http.get('/patent/IWoaPatentsController.do?apiSavePatentsOrder&patentsid=' + a + '&userid=' + localStorage.getItem('userId'))
             .then(function(res) {
                 if (res.data.msgCode == '40000') {
-                    _self.$http.get('/api/IWoaPatentsController.do?apiPatentsWechatPay&orderid=' + res.data.data)
+                    _self.$http.get('/patent/IWoaPatentsController.do?apiPatentsWechatPay&orderid=' + res.data.data)
                     .then(function(response) {
                         window.location.href = response.data
                     })
@@ -123,8 +127,9 @@ export default {
 
         getData() {
             let _self = this
+            _self.getCenterData()
             _self.pList = []
-            this.$http.get('/api/IWoaPatentsController.do?apiCheckPatentsMsg&patentsname=' + _self.searchvalue2).then(function(res) {
+            this.$http.get('/patent/IWoaPatentsController.do?apiCheckPatentsMsg&patentsname=' + _self.searchvalue2).then(function(res) {
                 if(res.data.length == 0){
                     _self.searchzero = true
                 //     // window.location.href = '/#/HelloWorld?id=' + localStorage.getItem('userId')
@@ -135,12 +140,12 @@ export default {
                 }
                 for (let i = 0; i < res.data.length; i++) {
                     
-                    _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].id)
+                    _self.$http.get('/patent/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].id)
                     .then(function(response) {
                         let _img = ''
                         let _patenttype = ''
                         let _industryType = ''
-                        _img = '/api/' + response.data[0].realpath
+                        _img = '/patent/' + response.data[0].realpath
 
                         for (let k = 0; k < _self.patents_industryType.length; k++) {
                             if (res.data[i].industry == _self.patents_industryType[k].typecode) {
@@ -185,19 +190,19 @@ export default {
 
         getCenterData() {
             let _self = this
-
-            this.$http.get('/api/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus')
+            this.$http.get('/patent/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus')
             .then(function(res) {
                 _self.patents_industryType = res.data.patents_industryType
                 _self.patents_productstatus = res.data.patents_productstatus
                 _self.patents_type = res.data.patents_type
-                _self.getData()
+                
             })
         }
     },
     mounted() {
         this.searchvalue2 = this.$route.params.searchvalue
-        this.getCenterData()
+        // this.getCenterData()
+        this.getData()
     }
 }
 </script>

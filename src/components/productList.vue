@@ -17,11 +17,11 @@
             <van-search
                 v-model="searchvalue"
                 placeholder="输入专利名称搜索"
-                show-action
+                
                 @search="onSearch">
-                <div slot="action" @click="onSearch" style="margin-left:10px;margin-right:10px;color:#666666;">
+                <!-- <div slot="action" @click="onSearch" style="margin-left:10px;margin-right:10px;color:#666666;">
                     <van-button type="default" size="small" style="">搜索</van-button>
-                </div>
+                </div> -->
             </van-search>
         </form>
 
@@ -180,15 +180,15 @@ export default {
             let _self = this
             _self.typecode = this.$route.params.typecode
 
-            this.$http.get('/api/IWoaPatentsController.do?apiQueryPatents&page=1&pageSize=10&typecode=' + _self.typecode)
+            this.$http.get('/patent/IWoaPatentsController.do?apiQueryPatents&page=1&pageSize=10&typecode=' + _self.typecode)
             .then(function(res) {
                 for (let i = 0; i < res.data.length; i++) {
-                    _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].pid)
+                    _self.$http.get('/patent/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].pid)
                     .then(function(response) {
                         let _img = ''
                         let _patenttype = ''
                         let _industryType = ''
-                        _img = '/api/' + response.data[0].realpath
+                        _img = '/patent/' + response.data[0].realpath
 
                         for (let k = 0; k < _self.patents_industryType.length; k++) {
                             if (res.data[i].industry == _self.patents_industryType[k].typecode) {
@@ -256,14 +256,14 @@ export default {
             _self.page = _self.page + 1
 
             setTimeout(() => {
-                _self.$http.get('/api/IWoaPatentsController.do?apiQueryPatents&page='+_self.page+'&pageSize=10&typecode=' + _self.typecode)
+                _self.$http.get('/patent/IWoaPatentsController.do?apiQueryPatents&page='+_self.page+'&pageSize=10&typecode=' + _self.typecode)
                 .then(function(res) {
                     if (res.data.length > 0) {
                         for (let i = 0; i < res.data.length; i++) {
-                            _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].pid)
+                            _self.$http.get('/patent/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + res.data[i].pid)
                             .then(function(response) {
                                 let _img = ''
-                                _img = '/api/' + response.data[0].realpath
+                                _img = '/patent/' + response.data[0].realpath
                                 _self.pList.push({
                                     thumb: _img,
                                     patentname: res.data[i].patentname,
@@ -285,10 +285,10 @@ export default {
         buy(a) {
             let _self = this
 
-            this.$http.get('/api/IWoaPatentsController.do?apiSavePatentsOrder&patentsid=' + a + '&userid=' + localStorage.getItem('userId'))
+            this.$http.get('/patent/IWoaPatentsController.do?apiSavePatentsOrder&patentsid=' + a + '&userid=' + localStorage.getItem('userId'))
             .then(function(res) {
                 if (res.data.msgCode == '40000') {
-                    _self.$http.get('/api/IWoaPatentsController.do?apiPatentsWechatPay&orderid=' + res.data.data)
+                    _self.$http.get('/patent/IWoaPatentsController.do?apiPatentsWechatPay&orderid=' + res.data.data)
                     .then(function(response) {
                         window.location.href = response.data
                     })
@@ -312,7 +312,7 @@ export default {
         getCenterData() {
             let _self = this
 
-            this.$http.get('/api/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus')
+            this.$http.get('/patent/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus')
             .then(function(res) {
                 _self.patents_industryType = res.data.patents_industryType
                 _self.patents_productstatus = res.data.patents_productstatus

@@ -85,10 +85,17 @@ export default {
     methods: {
         getData() {
             let _self = this
+            // if(localStorage.getItem('patdetid')!=null){
+            //     _self.patdetid = localStorage.getItem('patdetid')
+            //     _self.typecode = localStorage.getItem('typecode')
+            // }else{
+            //     _self.patdetid = this.$route.params.patdetid
+            //     _self.typecode = this.$route.params.typecode
+            // }
             _self.patdetid = this.$route.params.patdetid
             _self.typecode = this.$route.params.typecode
-            localStorage.setItem('patdetid', _self.$route.params.patdetid)
-            _self.$http.get('/api/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + localStorage.getItem('patdetid'))
+            localStorage.setItem('patdetid', _self.$route.params.patdetid)            
+            _self.$http.get('/patent/IWoaPatentsController.do?apiQueryPictureByPatentsid&patentsid=' + localStorage.getItem('patdetid'))
                 .then(function(res) {
                     
                     let _patenttype = ''
@@ -126,7 +133,7 @@ export default {
 
                     _self.goods.title = res.data[0].patentname
                     _self.goods.price = res.data[0].price
-                    _self.goods.thumb.push('/api/' + res.data[0].realpath)
+                    _self.goods.thumb.push('/patent/' + res.data[0].realpath)
                     _self.goods.patentcode = res.data[0].patentcode
                     _self.goods.patenttype = _patenttype
                     _self.goods.industry = _industryType
@@ -136,7 +143,7 @@ export default {
 
                     if (res.data.length > 1) {
                         for (let i = 1; i < res.data.length; i++) {
-                            _self.imageList.push('/api/' + res.data[i].realpath)
+                            _self.imageList.push('/patent/' + res.data[i].realpath)
                         }
                     }
                 })
@@ -167,10 +174,10 @@ export default {
         buy(a) {
             let _self = this
 
-            this.$http.get('/api/IWoaPatentsController.do?apiSavePatentsOrder&patentsid=' + a + '&userid=' + localStorage.getItem('userId'))
+            this.$http.get('/patent/IWoaPatentsController.do?apiSavePatentsOrder&patentsid=' + a + '&userid=' + localStorage.getItem('userId'))
             .then(function(res) {
                 if (res.data.msgCode == '40000') {
-                    _self.$http.get('/api/IWoaPatentsController.do?apiPatentsWechatPay&orderid=' + res.data.data)
+                    _self.$http.get('/patent/IWoaPatentsController.do?apiPatentsWechatPay&orderid=' + res.data.data)
                     .then(function(response) {
                         window.location.href = response.data
                     })
@@ -183,7 +190,7 @@ export default {
         getCenterData() {
             let _self = this
 
-            this.$http.get('/api/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus,patents_legalstatus')
+            this.$http.get('/patent/IWoaPatentsController.do?apiqueryTsTypeByGroupCodes&groupCodesStr=patents_type,patents_industryType,patents_productstatus,patents_legalstatus')
             .then(function(res) {
                 _self.patents_industryType = res.data.patents_industryType
                 _self.patents_productstatus = res.data.patents_productstatus
@@ -193,13 +200,23 @@ export default {
             })
         }
     },
+    // beforeRouteLeave(to, from, next){
+    //     if(to.name == 'chat'){
+    //         localStorage.setItem('patdetid', this.$route.params.patdetid)
+    //         localStorage.setItem('typecode', this.$route.params.typecode)       
+    //     }else{
+    //         localStorage.removeItem('patdetid')
+    //         localStorage.removeItem('typecode')
+    //     }
+    //     next()
+    // },
     created() {
         let _self = this
         this.getCenterData()
-        window.addEventListener('popstate',(e)=>{
-            console.log(_self.$route)
-            console.log("1111")
-        })
+        // window.addEventListener('popstate',(e)=>{
+        //     console.log(_self.$route)
+        //     console.log("1111")
+        // })
     }
 }
 </script>
